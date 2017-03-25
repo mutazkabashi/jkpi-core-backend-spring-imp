@@ -1,0 +1,46 @@
+====================== Using Report===================================================
+--Report by ReportName and insertionDate 
+from ReportImpl report join fetch report.reportGroups rgroup join fetch rgroup.reportRows rrow join fetch rrow.reportColumns rcolumn 
+join fetch rcolumn.reportRecords rrecord where report.reportName='Financial Performacne '  and rrecord.insertionDate='"2015-02-01"'
+
+--Report by ReportName ,insertionDate and groupName
+from ReportImpl report join fetch report.reportGroups rgroup join fetch rgroup.reportRows rrow join fetch rrow.reportColumns rcolumn 
+join fetch rcolumn.reportRecords rrecord where report.reportName='Financial Performacne ' and rgroup.groupName='Revenue'  and rrecord.insertionDate='"2015-02-01"'
+
+--Report by ReportName ,period and groupName
+from ReportImpl report join fetch report.reportGroups rgroup join fetch rgroup.reportRows rrow join fetch rrow.reportColumns rcolumn 
+join fetch rcolumn.reportRecords rrecord where report.reportName='Financial Performacne ' and rgroup.groupName='Revenue'  
+and rrecord.insertionDate between '2015-01-01' and '2015-02-01'
+
+--Report by ReportName ,lastUploadedDate and groupName
+from ReportImpl report join fetch report.reportGroups rgroup join fetch rgroup.reportRows rrow join fetch rrow.reportColumns rcolumn 
+join fetch rcolumn.reportRecords rrecord where report.reportName='Financial Performacne ' and rgroup.groupName='Revenue'  
+and rrecord.insertionDate = (select max(rrecord2.insertionDate) from ReportRecordImpl rrecord2)
+
+====================== Using ReportRecord===================================================
+
+--Report by ReportName (using reportRecord)
+from ReportRecordImpl rrecord join fetch rrecord.reportColumn rcolumn join fetch rcolumn.reportRow rrow join fetch rrow.reportGroup rgroup
+join fetch  rgroup.report report where report.reportName ='Financial Performacne ' 
+
+--Report by ReportName and insertion date (using reportRecord)
+from ReportRecordImpl rrecord join fetch rrecord.reportColumn rcolumn join fetch rcolumn.reportRow rrow join fetch rrow.reportGroup rgroup
+join fetch  rgroup.report report where report.reportName ='Financial Performacne ' and rrecord.insertionDate='"2015-02-01"'
+
+--Report by ReportName ,insertionDate and groupName (using reportRecord)
+from ReportRecordImpl rrecord join fetch rrecord.reportColumn rcolumn join fetch rcolumn.reportRow rrow join fetch rrow.reportGroup rgroup
+join fetch  rgroup.report report where report.reportName ='Financial Performacne ' and rgroup.groupName='Revenue' and rrecord.insertionDate='2015-02-01'
+
+--Report by ReportName ,groupName and period (Using reportRecord)
+from ReportRecordImpl rrecord join fetch rrecord.reportColumn rcolumn join fetch rcolumn.reportRow rrow join fetch rrow.reportGroup rgroup
+join fetch  rgroup.report report where report.reportName ='Financial Performacne ' and rgroup.groupName='Revenue' 
+and rrecord.insertionDate between '2015-01-01' and '2015-02-01'
+
+--Report by ReportName,lastUploadedDate, and groupName (using reportRecord)
+from ReportRecordImpl rrecord join fetch rrecord.reportColumn rcolumn join fetch rcolumn.reportRow rrow join fetch rrow.reportGroup rgroup
+join fetch  rgroup.report report where report.reportName ='Financial Performacne ' and rgroup.groupName='Revenue' 
+and rrecord.insertionDate = (select max(rrecord2.insertionDate) from ReportRecordImpl rrecord2 where rrecord2.reportColumn.reportRow.reportGroup.report.reportName='Financial Performacne ')
+
+
+
+
